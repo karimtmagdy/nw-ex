@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isAdmin, authorize } = require("../middleware/auth");
+const { isStaff, authorize, onlyAdmin } = require("../middleware/auth");
 const {
   createCategory,
   deleteCategory,
@@ -17,13 +17,13 @@ const { validID } = require("../middleware/validate");
 
 router
   .route("/")
-  .post([authorize, isAdmin], validateCategory, createCategory)
+  .post([authorize, isStaff], validateCategory, createCategory)
   .get(getAllCategories);
 
 router
   .route("/:id")
-  .delete([authorize, isAdmin], validateCategoryId, deleteCategory)
+  .delete([authorize, onlyAdmin], validateCategoryId, deleteCategory)
   .get(validID, getCategoryById)
-  .patch([authorize, isAdmin], validateCategoryId, updateCategory);
+  .patch([authorize, onlyAdmin], validateCategoryId, updateCategory);
 
 module.exports = router;

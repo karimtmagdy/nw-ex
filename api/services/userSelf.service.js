@@ -3,37 +3,22 @@ const { fn, paginate } = require("../lib/utils");
 const { AppError } = require("../middleware/errorHandler");
 const jwt = require("jsonwebtoken");
 
-// @route   PATCH api/v1/users/:id/password
-// @desc    Update user password by id
 // @access  Private
 exports.updateUserPassword = fn(async (req, res, next) => {});
 
-// @route   GET api/v1/users/me
-// @desc    Get current user
 // @access  Private
 exports.getMe = fn(async (req, res, next) => {
-  // Get user details
-  const { id } = req.user;
   const auth = req.headers.authorization;
   const token = auth && auth.split(" ")[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const user = await User.findById(decoded._id || req.user.id).select("-password").exec();
-  // console.log("req", req);
-  console.log("id", id);
-  console.log("decoded", decoded);
-  console.log("user", user);
-  console.log("user", req.user);
+  const user = await User.findById(decoded._id).select("-password").exec();
   if (!user) return next(new AppError("User not found", 404));
-  res.json(user);
+  res.json({ status: "success", user });
 });
 
-// @route   DELETE api/v1/users/me
-// @desc    Delete current user himself
 // @access  Private
 exports.deleteMe = fn(async (req, res, next) => {});
 
-// @route   PATCH api/v1/users/me
-// @desc    Update user himself
 // @access  Private
 exports.updateMe = fn(async (req, res, next) => {
   const { id } = req.params;

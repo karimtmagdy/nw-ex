@@ -10,7 +10,8 @@ const brandSchema = z.object({
   description: z
     .string()
     .min(10, "Description must be at least 10 characters")
-    .max(500, "Description must not exceed 500 characters").optional(),
+    .max(500, "Description must not exceed 500 characters")
+    .optional(),
 });
 
 const validateBrandId = (req, res, next) => {
@@ -24,8 +25,27 @@ const validateBrandId = (req, res, next) => {
     next(new AppError(error.errors[0].message, 400));
   }
 };
-
+const updateBrandSchema = z.object({
+  id: z.string(),
+  name: z
+    .string()
+    .nonempty({ message: "brand name is required" })
+    .min(3, { message: "brand name must be at least 3 characters long" })
+    .max(32, { message: "brand name must be less than 32 characters long" }),
+  description: z.string().optional(),
+  image: z.string().optional(),
+});
 module.exports = {
   validateBrand: validate(brandSchema),
   validateBrandId,
+  updateBrandSchema,
 };
+const createBrandSchema = z.object({
+  name: z
+    .string()
+    .nonempty({ message: "brand name is required" })
+    .min(3, { message: "brand name must be at least 3 characters long" })
+    .max(32, { message: "brand name must be less than 32 characters long" }),
+  description: z.string().optional(),
+  image: z.string().optional(),
+});

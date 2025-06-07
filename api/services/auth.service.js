@@ -3,8 +3,6 @@ const { fn } = require("../lib/utils");
 const { AppError } = require("../middleware/errorHandler");
 const jwt = require("jsonwebtoken");
 
-// @route   POST api/v1/auth/sign-up
-// @desc    Register a user
 // @access  Public
 exports.register = fn(async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -27,8 +25,6 @@ exports.register = fn(async (req, res, next) => {
   });
 });
 
-// @route   POST api/v1/auth/sign-in
-// @desc    Authenticate user & get token
 // @access  Public
 exports.login = fn(async (req, res, next) => {
   const { email, password } = req.body;
@@ -45,7 +41,7 @@ exports.login = fn(async (req, res, next) => {
     role: user.role,
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: process.env.JWT_EXPIRY_ACCESS,
   });
   // Create refresh token
   //   const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
@@ -55,7 +51,7 @@ exports.login = fn(async (req, res, next) => {
   jwt.sign(
     payload,
     process.env.JWT_REFRESH_SECRET,
-    { expiresIn: "24h" },
+    { expiresIn: process.env.JWT_EXPIRY_REFRESH },
     (err, refreshToken) => {
       if (err) throw err;
       res.cookie("refreshToken", refreshToken, {
@@ -82,8 +78,6 @@ exports.login = fn(async (req, res, next) => {
   });
 });
 
-// @route   POST api/v1/auth/sign-out
-// @desc    Logout user & remove token
 // @access  Public
 exports.logout = fn(async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -93,15 +87,12 @@ exports.logout = fn(async (req, res, next) => {
   user.active = false;
   user.isOnline = "offline";
   await user.save();
-  if (!cookie)
-    return res
-      .status(400)
-      .json({ status: "fail", message: "Already logged out" });
-
-  res.cookie("refreshToken", "", {
+  if (!cookie || !decoded) next(new AppError("Already logged out", 400));
+  res.clearCookie("refreshToken", "", {
     httpOnly: true,
     expires: new Date(0),
     sameSite: "strict",
+    path: "/",
   });
   res.status(200).json({
     status: "success",

@@ -7,11 +7,12 @@ const cors = require("cors");
 const { connectDB } = require("./api/config/db");
 const { handler } = require("./api/routes");
 const { errorHandler, AppError } = require("./api/middleware/errorHandler");
+const { MiddlewareApplication } = require("./api/middleware/middleware");
 // Initialize Express app
 const app = express();
 
 // Middleware
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -26,16 +27,8 @@ app.get("/", (req, res) => {
 app.get("/api", (req, res) => {
   res.send("API is running");
 });
-// Handle unhandled routes
-app.use((req, res, next) => {
-  const error = new AppError(
-    `Can't find ${req.originalUrl} on this server!`,
-    404
-  );
-  next(error);
-});
-// Global error handling middleware (add this after all routes)
-app.use(errorHandler);
+
+MiddlewareApplication(app);
 // Create folder structure
 const PORT = process.env.PORT || 8000;
 

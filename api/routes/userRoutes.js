@@ -12,17 +12,17 @@ const {
   updateMe,
   getMe,
 } = require("../services/userActions.service");
-const { isAdmin, authorize } = require("../middleware/auth");
+const { onlyAdmin, authorize } = require("../middleware/auth");
 
 router.use([authorize]);
 
 router.route("/me").get(getMe).patch(updateMe).delete(deleteMe);
-router.route("/").get([isAdmin], getAllUsers).post([isAdmin], createUser);
+router.route("/").get([onlyAdmin], getAllUsers).post([onlyAdmin], createUser);
 router
   .route("/:id")
-  .get([isAdmin], getSingleUser)
-  .patch([isAdmin], updateUser)
-  .delete([isAdmin], deleteUser);
+  .get([onlyAdmin], getSingleUser)
+  .patch([onlyAdmin], updateUser)
+  .delete([onlyAdmin], deleteUser);
 
 module.exports = router;
 

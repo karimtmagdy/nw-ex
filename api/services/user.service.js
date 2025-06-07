@@ -2,8 +2,6 @@ const { User } = require("../models/User");
 const { fn, paginate } = require("../lib/utils");
 const { AppError } = require("../middleware/errorHandler");
 
-// @route   CREATE api/v1/users
-// @desc    Create new user
 // @access  Private
 exports.createUser = fn(async (req, res, next) => {
   const { username, email, password, role, gender } = req.body;
@@ -28,48 +26,40 @@ exports.createUser = fn(async (req, res, next) => {
   });
 });
 
-// @route   GET api/v1/users
-// @desc    Get all users (admin only)
 // @access  Private
 exports.getAllUsers = fn(async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const total = await Category.countDocuments();
   const users = await User.find()
+    .skip(skip)
+    .limit(limit)
     .select("-password -refreshToken -cart -orders -tags -remember_me -slug")
-    .exec();
-  res.json(users);
+    .lean();
+  res.json({
+    results: total,
+    page,
+    limit,
+    pages: Math.ceil(total / limit),
+    users,
+  });
 });
 
-// @route   GET api/v1/users/:id
-// @desc    Get user by id
 // @access  Private
 exports.getSingleUser = fn(async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findById({ _id: id }).exec();
   if (!user) return next(new AppError("User not found", 404));
-  res.status(200).json({
-    status: "success",
-    user: {
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      gender: user.gender,
-      active: user.active,
-      verified: user.verified,
-      joinedAt: user.joinedAt,
-      updatedAt: user.updatedAt,
-    },
-  });
+  res.status(200).json({ status: "success", user });
 });
 
-// @route   PATCH api/v1/users/:id
-// @desc    Update user by id
 // @access  Private
 exports.updateUser = fn(async (req, res, next) => {
   const { id } = req.params;
-  const { username, email, role } = req.body;
+  const { username, role } = req.body;
   const updates = {};
   if (username) updates.username = username;
-  if (email) updates.email = email;
   if (role) updates.role = role;
   const user = await User.findByIdAndUpdate(
     { _id: id },
@@ -82,8 +72,6 @@ exports.updateUser = fn(async (req, res, next) => {
     .json({ status: "success", message: "User updated successfully", user });
 });
 
-// @route   DELETE api/v1/users/:id
-// @desc    Delete user by id
 // @access  Private
 exports.deleteUser = fn(async (req, res, next) => {
   const { id } = req.params;

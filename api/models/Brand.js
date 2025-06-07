@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const { Types, Schema, model } = require("mongoose");
 const slugify = require("slugify");
 
-const BrandSchema = new mongoose.Schema(
+const BrandSchema = new Schema(
   {
     name: {
       type: String,
@@ -39,7 +39,6 @@ BrandSchema.pre("save", function (next) {
   next();
 });
 
-const Brand = mongoose.model("Brand", BrandSchema);
+const Brand = model("Brand", BrandSchema);
 
-// Export the model for use in other file
 module.exports = { Brand };

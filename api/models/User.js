@@ -1,29 +1,14 @@
-const mongoose = require("mongoose");
+const { Types, Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
 const slugify = require("slugify");
+const {
+  GENDER_TYPES,
+  USER_ROLES,
+  USER_STATUS,
+  ONLINE_STATUS,
+} = require("../lib/constants");
 
-const GENDER_TYPES = Object.freeze({
-  MALE: "male",
-  FEMALE: "female",
-});
-const USER_ROLES = Object.freeze({
-  USER: "user",
-  ADMIN: "admin",
-  MANAGER: "manager",
-  MODERATOR: "moderator",
-});
-const USER_STATUS = Object.freeze({
-  ACTIVE: "active",
-  INACTIVE: "inactive",
-  BANNED: "banned",
-  SUSPENDED: "suspended",
-});
-const ONLINE_STATUS = Object.freeze({
-  ONLINE: "online",
-  OFFLINE: "offline",
-});
-
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema(
   {
     username: {
       type: String,
@@ -63,6 +48,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(GENDER_TYPES),
       sparse: true,
+      select: false,
     },
     role: {
       type: String,
@@ -79,17 +65,12 @@ const UserSchema = new mongoose.Schema(
       enum: Object.values(ONLINE_STATUS),
       default: ONLINE_STATUS.OFFLINE,
     },
-    last_login: {
-      type: Date,
-      select: false,
-      sparse: true,
-    },
-
     refreshToken: String,
+    last_login: { type: Date, select: false, sparse: true },
     slug: { type: String, lowercase: true, trim: true },
-    active: { type: Boolean, default: false },
     phone: { type: Number, default: undefined, sparse: true },
     remember_me: { type: Boolean, default: false, sparse: true },
+    active: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     photo: {
       type: Object,
@@ -97,22 +78,11 @@ const UserSchema = new mongoose.Schema(
         type: String,
         default:
           "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png",
-        // sparse: true,
       },
-      public_id: {
-        type: String,
-        default: undefined,
-        sparse: true,
-      },
+      public_id: { type: String, default: undefined },
     },
-    tags: [{ type: mongoose.Types.ObjectId, ref: "tag", sparse: true }],
-    cart: [{ type: mongoose.Types.ObjectId, ref: "cart", sparse: true }],
-    orders: [{ type: mongoose.Types.ObjectId, ref: "order", sparse: true }],
-
-    // wishlist: [{ type: Types.ObjectId, ref: "wishlist" }],
-    // likes: [{ type: Types.ObjectId, ref: "likes" }],
-    // favorite: [{ type: Types.ObjectId, ref: "favorite" }],
-    // permission: [{ type: Types.ObjectId, ref: "Permission" }],
+    cart: [{ type: Types.ObjectId, ref: "cart", sparse: true }],
+    orders: [{ type: Types.ObjectId, ref: "order", sparse: true }],
   },
   { timestamps: { createdAt: "joinedAt" }, collection: "users" }
 );
@@ -133,9 +103,8 @@ UserSchema.pre("save", function (next) {
   this.slug = slugify(this.username, { lower: true });
   next();
 });
-const User = mongoose.model("User", UserSchema);
+const User = model("User", UserSchema);
 
-// Export the model for use in other file
 module.exports = { User };
 // deletedAt: { type: Date, default: null },
 // resetPasswordToken: String,
@@ -148,3 +117,8 @@ module.exports = { User };
 // verifyOtpExpireAt: { type: Number, default: 0 },
 // resetOtp: { type: String, default: "" },
 // resetOtpExpireAt: { type: Number, default: 0 },
+// tags: [{ type: Types.ObjectId, ref: "tag", sparse: true }],
+// wishlist: [{ type: Types.ObjectId, ref: "wishlist" }],
+// likes: [{ type: Types.ObjectId, ref: "likes" }],
+// favorite: [{ type: Types.ObjectId, ref: "favorite" }],
+// permission: [{ type: Types.ObjectId, ref: "Permission" }],

@@ -3,8 +3,6 @@ const { fn, paginate, auth } = require("../lib/utils");
 const { AppError } = require("../middleware/errorHandler");
 const jwt = require("jsonwebtoken");
 
-// @route   GET api/v1/users/me
-// @desc    Get current user
 // @access  Private
 exports.getMe = fn(async (req, res, next) => {
   const token = auth(req);
@@ -16,8 +14,6 @@ exports.getMe = fn(async (req, res, next) => {
   res.status(200).json({ status: "success", user });
 });
 
-// @route   DELETE api/v1/users/me
-// @desc    Delete current user himself
 // @access  Private
 exports.deleteMe = fn(async (req, res, next) => {
   const token = auth(req);
@@ -30,8 +26,6 @@ exports.deleteMe = fn(async (req, res, next) => {
     .json({ status: "success", message: "User deleted successfully" });
 });
 
-// @route   PATCH api/v1/users/me
-// @desc    Update user himself
 // @access  Private
 exports.updateMe = fn(async (req, res, next) => {
   const { id } = req.params;
@@ -53,8 +47,6 @@ exports.updateMe = fn(async (req, res, next) => {
     .json({ status: "success", message: "User updated successfully", user });
 });
 
-// @route   PATCH api/v1/users/:id/password
-// @desc    Update user password by id
 // @access  Private
 exports.updateUserPassword = fn(async (req, res, next) => {
   const { currentPassword, newPassword } = req.body;

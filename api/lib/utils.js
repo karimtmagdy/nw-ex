@@ -4,7 +4,7 @@ const { AppError } = require("../middleware/errorHandler");
 exports.fn = (callback) => asyncHandler(callback);
 exports.auth = (req, res, next) => {
   const token =
-    req.headers.authorization.startsWith("Bearer") &&
+    req.headers.authorization.startsWith("Bearer ") &&
     req.headers.authorization.split(" ")[1];
   // Check if no token
   if (!token) return next(new AppError("No token, authorization denied", 401));

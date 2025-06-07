@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const { Types, Schema, model } = require("mongoose");
 const slugify = require("slugify");
 
-const CategorySchema = new mongoose.Schema(
+const CategorySchema = new Schema(
   {
     name: {
       type: String,
@@ -35,7 +35,6 @@ CategorySchema.pre("save", function (next) {
   next();
 });
 
-const Category = mongoose.model("Category", CategorySchema);
+const Category = model("Category", CategorySchema);
 
-// Export the model for use in other file
 module.exports = { Category };

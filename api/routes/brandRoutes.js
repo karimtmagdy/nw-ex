@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isAdmin, authorize } = require("../middleware/auth");
+const { isStaff, authorize, onlyAdmin } = require("../middleware/auth");
 
 const {
   getAllBrands,
@@ -18,13 +18,13 @@ const {
 
 router
   .route("/")
-  .post([authorize, isAdmin], validateBrand, createBrand)
+  .post([authorize, isStaff], validateBrand, createBrand)
   .get(getAllBrands);
 
 router
   .route("/:id")
-  .delete([authorize, isAdmin], validateBrandId, deleteBrand)
   .get(validID, getSingleBrand)
-  .patch([authorize, isAdmin], validateBrandId, updateBrand);
+  .patch([authorize, onlyAdmin], validateBrandId, updateBrand)
+  .delete([authorize, onlyAdmin], validateBrandId, deleteBrand);
 
 module.exports = router;
