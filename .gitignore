@@ -1,0 +1,16 @@
+*.env
+/node_modules
+dist
+src
+package-lock.json
+chatController.js
+refreshTokenService.js
+productService.js
+JWTauth.js
+chatBotRoutes.js
+ChatBot.js
+openai.js
+chatbot.service.js
+.env
+drop f6f68ea add openai key by mistake
+/vscode

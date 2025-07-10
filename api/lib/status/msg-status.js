@@ -1,0 +1,40 @@
+exports.VALID = Object.freeze({
+  forbidden: "Access denied. Admin privileges required",
+  admin: "Access denied",
+  user_invalid: "Invalid credentials",
+  registered: "User registered successfully",
+  loggedIn: "User Logged in successfully",
+  loggedOut: "User Logged out successfully",
+  no_token: "",
+  user_exist: "User already exists",
+  not_active: "Your account is not active.",
+  // user
+  user_created: "User created successfully",
+  user_updated: "User updated successfully",
+  user_not: "User not found",
+  user_removed: "User deleted successfully",
+  // subcategory
+  subcategory_created: "sub category created successfully",
+  subcategory_updated: "sub category updated successfully",
+  subcategory_not: "sub category not found",
+  subcategory_exist: "sub category already exists",
+  subcategory_removed: "sub category deleted successfully",
+  // category
+  category_created: "category created successfully",
+  category_updated: "category updated successfully",
+  category_not: "category not found",
+  category_exist: "category already exists",
+  category_removed: "category deleted successfully",
+  // brand
+  brand_created: "brand created successfully",
+  brand_updated: "brand updated successfully",
+  brand_removed: "brand deleted successfully",
+  brand_not: "brand not found",
+  brand_exist: "Brand already exists",
+  // product
+  product_created: "Product created successfully",
+  product_updated: "Product updated successfully",
+  product_removed: "Product deleted successfully",
+  product_not: "Product not found",
+  product_exist: "Product already exists",
+});
