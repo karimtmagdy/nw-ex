@@ -106,3 +106,7 @@ You can also access it locally at:
 ## License
 
 MIT
+
+## DEV
+
+-  "con":"concurrently \"npm run dev\" \"npm run start\" "

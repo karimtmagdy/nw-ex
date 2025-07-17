@@ -23,4 +23,6 @@ export const {
   URL_FRONTEND,
   //
   SESSION_SECRET_KEY,
+   GEMINI_API_KEY,
+
 } = process.env;

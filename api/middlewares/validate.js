@@ -1,5 +1,5 @@
 const { isValidObjectId } = require("mongoose");
-const { AppError } = require("./errorHandler");
+const { AppError } = require("../class/app.error");
 const { z } = require("zod");
 exports.validate = (schema) => (req, res, next) => {
   try {
