@@ -1,5 +1,5 @@
-// const { errorHandler } = require("./errorHandler");
 const { AppError } = require("../class/app.error");
+const { errorHandler } = require("./errorHandler");
 
 exports.MiddlewareApplication = (app) => {
   // Handle unhandled routes
@@ -16,5 +16,5 @@ exports.MiddlewareApplication = (app) => {
       : next();
   });
   // Global error handling middleware (add this after all routes)
-  // app.use(errorHandler);
+  app.use(errorHandler);
 };
