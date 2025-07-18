@@ -1,6 +1,6 @@
 const { z } = require("zod");
-const { AppError } = require("../middleware/errorHandler");
-const { validate } = require("../middleware/validate");
+const { AppError } = require("../middlewares/errorHandler");
+const { validate } = require("../middlewares/validate");
 
 const categorySchema = z.object({
   name: z

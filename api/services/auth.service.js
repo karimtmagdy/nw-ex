@@ -1,6 +1,6 @@
 const { User } = require("../models/User");
 const { fn } = require("../lib/utils");
-const { AppError } = require("../middleware/errorHandler");
+const { AppError } = require("../class/app.error");
 const jwt = require("jsonwebtoken");
 const { VALID } = require("../lib/status/msg-status");
 const {

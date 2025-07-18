@@ -7,7 +7,7 @@ const {
   getSingleUser,
   updateUser,
 } = require("../services/user.service");
-const { validID } = require("../middleware/validate");
+const { validID } = require("../middlewares/validate");
 const {
   validateUserCreate,
   validateUserUpdate,

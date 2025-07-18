@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const {corsConfig} = require("./rules/cors-option");
+const { corsConfig } = require("./settings/cors-option");
 // ConfigApp
 const ConfigApp = (app) => {
   app.use(corsConfig());

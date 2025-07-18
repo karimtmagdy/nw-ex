@@ -6,7 +6,7 @@ const {
   createSubCategory,
   getSingleSubCategory,
 } = require("../services/subcategories.service");
-const { validID } = require("../middleware/validate");
+const { validID } = require("../middlewares/validate");
 const {
   validateSubCategoryCreate,
 } = require("../validator/subcategory.validate");

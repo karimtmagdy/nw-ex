@@ -8,7 +8,7 @@ const {
   updateBrand,
   getSingleBrand,
 } = require("../services/brand.service");
-const { validID } = require("../middleware/validate");
+const { validID } = require("../middlewares/validate");
 const {
   validateBrandUpdate,
   validateBrandCreate,

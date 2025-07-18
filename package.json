@@ -2,12 +2,13 @@
   "name": "nw-ex",
   "version": "1.0.0",
   "description": "E-commerce website with MongoDB, Express, and Node.js",
-  "main": "./api/index.js",
+  "main": "api/server.js",
   "scripts": {
-    "start": "node --trace-warnings ./api/index.js",
+    "start": "node --trace-warnings api/local.js",
     "dev": "nodemon",
     "test": "cross-env NODE_ENV=test node tests/api.test.js",
     "con": "concurrently \"npm run dev\"",
+    "vercel": "vercel dev",
     "random": "node -e \"console.log(crypto.randomBytes(64).toString('hex'))\""
   },
   "keywords": [

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isStaff, authorize, onlyAdmin } = require("../middleware/auth");
+const { isStaff, authorize, onlyAdmin } = require("../middlewares/auth");
 const {
   createCategory,
   deleteCategory,
@@ -13,7 +13,7 @@ const {
   validateCategory,
   validateCategoryId,
 } = require("../validator/category.validate");
-const { validID } = require("../middleware/validate");
+const { validID } = require("../middlewares/validate");
 
 router
   .route("/")

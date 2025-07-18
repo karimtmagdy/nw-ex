@@ -10,7 +10,7 @@ const {
   validateProductCreate,
   validateProductUpdate,
 } = require("../validator/product.validation");
-const { validID } = require("../middleware/validate");
+const { validID } = require("../middlewares/validate");
 // const { isStaff, authorize, onlyAdmin } = require("../middleware/auth");
 const router = Router();
 

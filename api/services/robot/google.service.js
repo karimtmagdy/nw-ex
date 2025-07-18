@@ -1,5 +1,5 @@
 const { fn } = require("../../lib/utils");
-const { gemini } = require("../../config/connection/google-ai");
+const { gemini } = require("../../config/integrations/google-ai");
 exports.GoogleService = fn(async (req, res) => {
   const { prompt } = req.body;
   try {

@@ -1,6 +1,6 @@
 {
-  "watch": ["api/**/*.js", "./api/index.js"],
+  "watch": ["api/**/*.js", "api/local.js"],
   "ext": "js,json",
   "ignore": ["node_modules/", "*.test.js"],
-  "exec": "node ./api/index.js"
+  "exec": "node api/local.js"
 }

@@ -1,4 +1,4 @@
-const { openai } = require("../../config/connection/open-ai");
+const { openai } = require("../../config/integrations/open-ai");
 const { OPENAI_API_KEY, OPENAI_ORG_ID } = process.env;
 exports.OpenAIService = async (req, res) => {
   try {

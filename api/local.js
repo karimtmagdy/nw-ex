@@ -1,9 +1,8 @@
-const { app } = require("./server");
+const app = require("./server");
+const { PORT } = process.env;
 const { MiddlewareApplication } = require("./middlewares/middleware");
 
-const PORT = process.env.PORT || 8000;
 MiddlewareApplication(app);
-app.listen(PORT, () => {
+app.listen(PORT || 8000, () => {
   console.log(`Server running on port ${PORT}`);
 });
-

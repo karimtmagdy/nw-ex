@@ -1,5 +1,5 @@
 const { z } = require("zod");
-const { validate } = require("../middleware/validate");
+const { validate } = require("../middlewares/validate");
 
 const createBrandSchema = z.object({
   name: z

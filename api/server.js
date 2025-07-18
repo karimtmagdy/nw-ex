@@ -13,4 +13,5 @@ app.get("/", (req, res) => {
   res.send("Hello from API Express on Vercel");
 });
 
-module.exports = { app };
+module.exports = app;
+// console.log(typeof module.exports)
