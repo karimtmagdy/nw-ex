@@ -1,0 +1,6 @@
+/api/
+/node_modules/
+.vscode/
+*.ts
+*.env
+.vercel\output

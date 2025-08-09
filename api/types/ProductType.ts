@@ -1,0 +1,30 @@
+import { HydratedDocument, Schema } from "mongoose";
+export interface IProduct {
+  name: string;
+  description: string;
+  price: number;
+  status: string;
+  sku: string;
+  colors: string[];
+  slug: string;
+  cover: string;
+  sold: number;
+  images: string[];
+  discount: number;
+  quantity: number;
+  published: boolean;
+  rating: number;
+  PriceAfterDiscount: number;
+  tags: string[];
+  // views: number;
+  // likes: number;
+  isActive: boolean;
+  category: Schema.Types.ObjectId[];
+  subcategory: Schema.Types.ObjectId[];
+  brand: Schema.Types.ObjectId[];
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  reviews: Schema.Types.ObjectId[];
+}
+export type ProductDocument = HydratedDocument<IProduct, Schema<any, any, any>>;
