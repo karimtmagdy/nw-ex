@@ -27,6 +27,7 @@ const MetadataSchema = new Schema(
 const ChatBotSchema = new Schema<IChat>(
   {
     title: { type: String, trim: true },
+    canUseBot: { type: Boolean, default: false },
     messages: [MessageSchema],
     // conversationId: { type: String, unique: true },
     slug: { type: String, lowercase: true, trim: true },

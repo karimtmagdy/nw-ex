@@ -4,7 +4,7 @@ import { Category } from "../models/Category";
 import { ICategory } from "../types/CategoryType";
 import { Request, Response, NextFunction } from "express";
 
-exports.createCategory = fn(
+export const createCategory = fn(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name } = req.body;
     // Check if category already exists
@@ -21,11 +21,10 @@ exports.createCategory = fn(
   }
 );
 
-// @access  Public
-exports.getAllCategories = fn(
+export const getAllCategories = fn(
   async (req: Request, res: Response, next: NextFunction) => {
-    const page: any = req.query.page || 1;
-    const limit: any = req.query.limit || 10;
+    const page: number = Number(req.query.page) || 1;
+    const limit: number = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const total = await Category.countDocuments();
     const categories = await Category.find().skip(skip).limit(limit).lean();
@@ -39,13 +38,15 @@ exports.getAllCategories = fn(
     });
   }
 );
-
-exports.updateCategory = fn(
+// @route   PATCH api/v1/categories/:id
+// @desc    Patch a category
+// @access  Private/admin
+export const updateCategory = fn(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const { name, image, isActive }: ICategory = req.body;
-
+    const { id } = req.params;
     const category = await Category.findByIdAndUpdate(
-      req.params.id,
+      id,
       { $set: { name, image, isActive } },
       { new: true, runValidators: true }
     );
@@ -58,8 +59,10 @@ exports.updateCategory = fn(
     });
   }
 );
-
-exports.singleCategory  = fn(
+// @route   GET api/v1/categories/:id
+// @desc    Get a category
+// @access  Private/admin
+export const singleCategory = fn(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const category = await Category.findById(id);
@@ -67,8 +70,10 @@ exports.singleCategory  = fn(
     res.status(200).json({ status: "success", category });
   }
 );
-
-exports.deleteCategory = fn(
+// @route   DELETE api/v1/categories/:id
+// @desc    Delete a category
+// @access  Private/admin
+export const deleteCategory = fn(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const category = await Category.findByIdAndDelete(id);

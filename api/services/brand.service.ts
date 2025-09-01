@@ -1,7 +1,7 @@
+import { IBrand } from "../types/BrandType";
 import AppError from "../class/api-error";
 import { fn } from "../lib/utils";
 import { Brand } from "../models/Brand";
-import { IBrand } from "../types/BrandType";
 import { Request, Response, NextFunction } from "express";
 export const createBrand = fn(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -21,8 +21,8 @@ export const createBrand = fn(
 
 export const getAllBrands = fn(
   async (req: Request, res: Response, next: NextFunction) => {
-    const page: any = req.query.page || 1;
-    const limit: any = req.query.limit || 10;
+    const page: number = Number(req.query.page) || 1;
+    const limit: number = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const total = await Brand.countDocuments();
     const brands = await Brand.find().skip(skip).limit(limit).lean();
@@ -39,29 +39,21 @@ export const getAllBrands = fn(
 
 export const updateBrand = fn(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    const { name, description, image, isActive } = req.body;
-    // Build brand object
-    const brandFields: IBrand = {
-      name: "",
-      image: "",
-      isActive: false,
-    };
-    if (name) brandFields.name = name;
-    if (image) brandFields.image = image;
-    if (isActive !== undefined) brandFields.isActive = isActive;
+    const { id } = req.params;
+    const { name, isActive }: Pick<IBrand, "name" | "isActive"> = req.body;
 
     const brand = await Brand.findByIdAndUpdate(
-      req.params.id,
-      { $set: brandFields },
+      id,
+      { $set: { name, isActive } },
       { new: true, runValidators: true }
     );
     if (!brand) return next(new AppError("brand not found", 404));
+    if (isActive === false) brand.status = "inactive";
+    if (isActive === true) brand.status = "active";
     await brand.save();
-    res.status(200).json({
-      status: "success",
-      message: "brand has been updated",
-      brand,
-    });
+    res
+      .status(200)
+      .json({ status: "success", message: "brand has been updated", brand });
   }
 );
 

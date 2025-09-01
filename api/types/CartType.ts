@@ -1,16 +1,19 @@
-import { HydratedDocument, Schema } from "mongoose";
+import { Document, ObjectId } from "mongoose";
+import { IProduct } from "./ProductType";
+
+export const statusCart = ["active", "completed"] as const;
+export type StatusCartType = (typeof statusCart)[number];
 
 export interface ICartItem {
-  productId: Schema.Types.ObjectId;
-  quantity: number;
+  productId: IProduct;
+  quantity?: number;
   color: string;
-  price: number;
-  totalPriceAfterDiscount: number;
-  totalAmount: number;
+  unitPrice: number;
+  // totalPriceAfterDiscount: number;
 }
-export interface ICart {
-  userId: Schema.Types.ObjectId;
+export interface ICart extends Pick<Document, "_id"> {
+  userId: string | ObjectId;
   items: ICartItem[];
+  status: StatusCartType;
+  // totalAmount: number;
 }
-
-export type CartDocument = HydratedDocument<ICart>;

@@ -7,7 +7,7 @@ import {
   singleChat,
   updateChat,
 } from "../services/chat.service";
-
+import { authorize } from "../middleware/is-verify";
 const router = Router();
 
 router.post("/gemini", GoogleService);

@@ -21,3 +21,9 @@ process.on("SIGTERM", () => {
   console.log("👋 SIGTERM received, shutting down gracefully");
   process.exit(0);
 });
+process.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.error(`error: Port ${PORT} is already in use.`);
+    process.exit(1);
+  }
+});

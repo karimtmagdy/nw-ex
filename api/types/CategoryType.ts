@@ -1,10 +1,10 @@
-import { HydratedDocument } from "mongoose";
+import { Document } from "mongoose";
 
-export interface ICategory {
+export interface ICategory extends Pick<Document, "_id"> {
+  _id: string;
   name: string;
   image: string;
   isActive: boolean;
   slug: string;
   status: string;
 }
-export type CategoryDocument = HydratedDocument<ICategory>;

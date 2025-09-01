@@ -1,9 +1,7 @@
-import { HydratedDocument, Schema } from "mongoose";
-export interface ISubCategory {
+import { ObjectId, Document } from "mongoose";
+export interface ISubCategory extends Pick<Document, "_id"> {
   name: string;
   slug: string;
   description: string;
-  category: Schema.Types.ObjectId[];
+  category: ObjectId[];
 }
-
-export type SubCategoryDocument = HydratedDocument<ISubCategory>;

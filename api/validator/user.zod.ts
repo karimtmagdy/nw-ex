@@ -1,5 +1,5 @@
 import { ObjectIdSchema } from "../middleware/validate";
-import { IUser, roles, status } from "../types/UserType";
+import { gender, IUser, roles, states, status } from "../types/UserType";
 import * as z from "zod";
 
 export const userSchema = z.object<z.input<IUser>>({
@@ -17,7 +17,7 @@ export const userSchema = z.object<z.input<IUser>>({
     .string()
     .min(6, "Password must be at least 6 characters")
     .max(32, "Password must be less than 32 characters"),
-  gender: z.enum(["male", "female"]).optional(),
+  gender: z.enum(gender).optional(),
   age: z.number().int().min(12).optional(),
   role: z.enum(roles).default("user"),
   phone: z.string().optional(),
@@ -36,13 +36,13 @@ export const userSchema = z.object<z.input<IUser>>({
       };
     }),
   status: z.enum(status).default("active"),
-  active: z.enum(["offline", "online"]).default("offline"),
+  active: z.enum(states).default("offline"),
   photo: z.object({
     url: z.string(),
     publicId: z.string(),
   }),
   verified: z.boolean().default(false),
-  rememberMe: z.boolean().default(false),
+  remember: z.boolean().default(false),
   isActive: z.boolean().default(false),
   activeAt: z.date().default(new Date()),
   deletedAt: z.date().default(null),
@@ -88,13 +88,9 @@ export const updatePasswordSchema = userSchema
     path: ["confirmPassword"],
   });
 
-export const deleteUserSchema = userSchema.pick({}).and(
-  z.object({
-    id: ObjectIdSchema,
-  })
-);
 export const singleUserSchema = userSchema.pick({}).and(
   z.object({
     id: ObjectIdSchema,
   })
 );
+ 

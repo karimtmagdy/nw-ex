@@ -1,8 +1,8 @@
-import { SubCategoryDocument } from "../types/SubcategoryType";
+import { ISubCategory } from "../types/SubcategoryType";
 import { Types, model, Schema } from "mongoose";
 import slugify from "slugify";
 
-const SubCategorySchema = new Schema<SubCategoryDocument>(
+const SubCategorySchema = new Schema<ISubCategory>(
   {
     name: {
       type: String,
@@ -23,7 +23,7 @@ SubCategorySchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
-export const SubCategory = model<SubCategoryDocument>(
+export const SubCategory = model<ISubCategory>(
   "SubCategory",
   SubCategorySchema
 );

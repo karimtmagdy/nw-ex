@@ -10,6 +10,7 @@ export enum RoleEnum {
 }
 export interface IChat extends Document {
   title?: string;
+  canUseBot: boolean;
   messages: Array<{
     role: RoleEnum;
     content: string;

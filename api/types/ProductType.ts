@@ -1,9 +1,17 @@
-import { HydratedDocument, Schema } from "mongoose";
-export interface IProduct {
+import { Document, ObjectId } from "mongoose";
+export enum StatusProductType {
+  "draft",
+  "published",
+  "archived",
+  "discontinued",
+}
+[];
+
+export interface IProduct extends Pick<Document, "_id"> {
   name: string;
   description: string;
   price: number;
-  status: string;
+  status: "draft" | "published" | "archived";
   sku: string;
   colors: string[];
   slug: string;
@@ -12,19 +20,18 @@ export interface IProduct {
   images: string[];
   discount: number;
   quantity: number;
-  published: boolean;
   rating: number;
   PriceAfterDiscount: number;
   tags: string[];
-  // views: number;
-  // likes: number;
-  isActive: boolean;
-  category: Schema.Types.ObjectId[];
-  subcategory: Schema.Types.ObjectId[];
-  brand: Schema.Types.ObjectId[];
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
-  reviews: Schema.Types.ObjectId[];
+  // isActive: boolean;
+  views: number;
+  published: boolean;
+  inStock: boolean;
+  featured: boolean;
+  category: ObjectId[];
+  subcategory: ObjectId[];
+  brand: ObjectId;
+  reviews: ObjectId[];
+  likes: number;
 }
-export type ProductDocument = HydratedDocument<IProduct, Schema<any, any, any>>;
+// deletedAt: Date;

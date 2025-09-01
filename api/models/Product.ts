@@ -1,8 +1,8 @@
-import { ProductDocument } from "../types/ProductType";
+import { IProduct } from "../types/ProductType";
 import { Types, model, Schema } from "mongoose";
 import slugify from "slugify";
 
-const ProductSchema = new Schema<ProductDocument>(
+const ProductSchema = new Schema<IProduct>(
   {
     name: {
       type: String,
@@ -13,13 +13,7 @@ const ProductSchema = new Schema<ProductDocument>(
       maxlength: 100,
     },
     description: { type: String, trim: true, minlength: 20, maxlength: 1000 },
-    price: { type: Number, required: true, trim: true, min: 1, max: 200000 },
-    status: {
-      type: String,
-      enum: ["draft", "published", "archived", "discontinued"],
-      default: "draft",
-      required: true,
-    },
+    price: { type: Number, required: true, trim: true, min: 0, max: 200000 },
     sku: { type: String, unique: true },
     colors: [String],
     slug: { type: String, trim: true, unique: true },
@@ -34,19 +28,26 @@ const ProductSchema = new Schema<ProductDocument>(
       sparse: true,
       select: false,
     },
-    quantity: { type: Number, default: 0, required: true },
+    // isActive: { type: Boolean, default: true },
     published: { type: Boolean, default: false },
-    rating: { type: Number, default: 0, min: 0, max: 5 },
+    quantity: { type: Number, default: 0, required: true },
+    inStock: { type: Boolean, default: true, sparse: false, select: false },
+    featured: { type: Boolean, default: false, sparse: false, select: false },
+    rating: { type: Number, default: 0, min: 1, max: 5 },
     PriceAfterDiscount: Number,
-    tags: [String],
-    // views: { type: Number, default: 0 },
-    // likes: { type: Number, default: 0 },
-    isActive: { type: Boolean, default: true },
     category: [{ type: Types.ObjectId, ref: "Category" }],
     subcategory: [{ type: Types.ObjectId, ref: "SubCategory" }],
-    brand: [{ type: Types.ObjectId, ref: "Brand" }],
+    brand: { type: Types.ObjectId, ref: "Brand", required: true },
     reviews: [{ type: Types.ObjectId, ref: "Review" }],
-
+    status: {
+      type: String,
+      enum: ["draft", "published", "archived"],
+      default: "draft",
+      //   required: true,
+    },
+    tags: [String],
+    views: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
     // currency: {
     //   type: String,
     //   trim: true,
@@ -66,7 +67,7 @@ const ProductSchema = new Schema<ProductDocument>(
     // unit: { type: String, default: "", sparse: false },
     // favorite: {},
     // wishlist: {},
-    // cart: {},
+
     // comments: { type: Number, default: 0 },
     // shares: { type: Number, default: 0 },
   },
@@ -85,7 +86,7 @@ ProductSchema.pre("save", function (next) {
   }
   next();
 });
-export const Product = model<ProductDocument>("Product", ProductSchema);
+export const Product = model<IProduct>("Product", ProductSchema);
 
 // productSchema.virtual("averageRating").get(function () {
 //   return this.ratings_average;
@@ -94,17 +95,10 @@ export const Product = model<ProductDocument>("Product", ProductSchema);
 // productSchema.virtual("totalRatings").get(function () {
 //   return this.ratings_count;
 // });
-
+// productSchema.set("toObject", {
 // productSchema.set("toJSON", {
 //   versionKey: false,
 //   transform: function (doc, ret) {
 //     delete ret._id;
-//   },
-// });
-// productSchema.set("toObject", {
-//   versionKey: false,
-//   transform: function (doc, ret) {
-//     delete ret._id;
-//     return ret;
 //   },
 // });

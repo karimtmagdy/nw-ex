@@ -16,3 +16,14 @@ export const SubcategorySchema = z.object({
     .optional(),
   category: z.array(ObjectIdSchema),
 }) satisfies z.ZodType<z.infer<ISubCategory>>;
+
+export const updateSubcategorySchema = SubcategorySchema.pick({
+  name: true,
+  description: true,
+  category: true,
+});
+export const singleSubcategorySchema = SubcategorySchema.pick({}).and(
+  z.object({
+    id: ObjectIdSchema,
+  })
+);

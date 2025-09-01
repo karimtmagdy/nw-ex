@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import {
   handleCastError,
   handleDuplicatedFieldDB,
+  handleJWTError,
+  handleJWTExpiredError,
   handleValidationError,
 } from "./globals-errors";
 export const errorHandler = (
@@ -18,8 +20,8 @@ export const errorHandler = (
   if (err.name === "ValidationError") error = handleValidationError(err);
   // if (err.code === 11000) error = handleDuplicateKeyError(err);
   if (err.code === 11000) error = handleDuplicatedFieldDB(err);
-  // if (err.name === "JsonWebTokenError") error = handleJWTError();
-  // if (err.name === "TokenExpiredError") error = handleJWTExpiredError();
+  if (err.name === "JsonWebTokenError") error = handleJWTError();
+  if (err.name === "TokenExpiredError") error = handleJWTExpiredError();
   error.statusCode = error.statusCode || 500;
   error.status = error.status || "error";
   res.status(error.statusCode).json({

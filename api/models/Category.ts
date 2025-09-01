@@ -1,8 +1,8 @@
-import { CategoryDocument } from "../types/CategoryType";
+import { ICategory } from "../types/CategoryType";
 import { model, Schema } from "mongoose";
 import slugify from "slugify";
 
-const CategorySchema = new Schema<CategoryDocument>(
+const CategorySchema = new Schema<ICategory>(
   {
     name: { type: String, required: true, trim: true, unique: true },
     image: { type: String },
@@ -22,4 +22,4 @@ CategorySchema.pre("save", function (next) {
   next();
 });
 
-export const Category = model<CategoryDocument>("Category", CategorySchema);
+export const Category = model<ICategory>("Category", CategorySchema);

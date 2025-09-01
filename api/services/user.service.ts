@@ -28,8 +28,8 @@ export const createUser = async (
     .json({ status: "success", message: "user has been created", user });
 };
 export const getAllUser = fn(async (req: Request, res: Response) => {
-  const page: any = req.query.page || 1;
-  const limit: any = req.query.limit || 10;
+  const page: number = Number(req.query.page) || 1;
+  const limit: number = Number(req.query.limit) || 10;
   const skip = (page - 1) * limit;
   const total = await User.countDocuments();
   const users = await User.find()
@@ -37,7 +37,6 @@ export const getAllUser = fn(async (req: Request, res: Response) => {
     .limit(limit)
     .select("email username role photo status")
     .lean();
-
   res.status(200).json({
     results: total,
     page,
@@ -46,14 +45,7 @@ export const getAllUser = fn(async (req: Request, res: Response) => {
     users,
   });
 });
-export const singleUser = fn(
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const user = await User.findById({ _id: id }).exec();
-    if (!user) return next(new AppError("user not found", 404));
-    res.status(200).json({ status: "success", user });
-  }
-);
+
 export const updateUser = fn(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const { id } = req.params;
@@ -69,6 +61,20 @@ export const updateUser = fn(
       .json({ status: "success", message: "user has been updated", user });
   }
 );
+// @route   GET api/v1/users/:id
+// @desc    Get a user
+// @access  Private/admin
+export const singleUser = fn(
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const user = await User.findById(id).exec();
+    if (!user) return next(new AppError("user not found", 404));
+    res.status(200).json({ status: "success", user });
+  }
+);
+// @route   DELETE api/v1/users/:id
+// @desc    Delete a user
+// @access  Private/admin
 export const deleteUser = fn(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const { id } = req.params;

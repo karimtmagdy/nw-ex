@@ -19,3 +19,6 @@ export const MiddlewareApplication = (app: Express) => {
   // Global error handling middleware (add this after all routes)
   app.use(errorHandler);
 };
+// app.all("*", (req, res, next) => {
+//   next(new ApiError(`Can't find ${req.originalUrl} on this server!`, 404));
+// });

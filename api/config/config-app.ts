@@ -33,7 +33,11 @@ export const ConfigApp = (app: Express) => {
   //     resave: false,
   //     saveUninitialized: false,
   //     secret: SESSION_KEY,
-  //     // store: store,
+  //     store: MongoStore.create({
+  // dbName: "newave",
+  //       serializer: JSON.stringify,
+  // deserializer: JSON.parse,
+  // }),
   //   })
   // );
   // app.use((req: Request, res: Response, next: NextFunction) => {

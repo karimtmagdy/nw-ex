@@ -4,7 +4,7 @@ import { User } from "../models/User";
 import { IUser } from "../types/UserType";
 import AppError from "../class/api-error";
 import { createToken, refreshToken } from "../lib/helper";
-import { NODE_ENV, JWT_SECRET } from "../lib/env-local";
+import { JWT_SECRET } from "../lib/env-local";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const register = fn(
@@ -39,21 +39,23 @@ export const login = fn(
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return next(new AppError("Invalid credentials", 400));
     const token = createToken(user);
-    // user.refreshToken = refreshToken(user);
+    user.refreshToken = refreshToken(user);
     user.active = "online";
     user.isActive = true;
     user.activeAt = new Date();
     const userObj = user.toObject();
     delete userObj.password;
+    delete userObj.createdAt;
+    delete userObj.updatedAt;
     await user.save();
-    // res.cookie("refreshToken", refreshToken, {
-    //   // path: "/api/v1/auth/refresh-token",
-    //   httpOnly: true,
-    //   path: "/",
-    //   maxAge: 30 * 24 * 60 * 60 * 1000,
-    //   sameSite: "strict",
-    //   secure: NODE_ENV === "production", //true
-    // });
+    res.cookie("refreshToken", user.refreshToken, {
+      httpOnly: true,
+      path: "/api/v1/auth/refresh-token",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: "none",
+      secure: true,
+      signed: false,
+    });
     res.status(200).json({
       status: "success",
       message: "user signed in successfully",
@@ -64,13 +66,12 @@ export const login = fn(
 );
 export const logout = fn(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const token = req.headers["authorization"]?.split(" ")[1];
-    const cookie = req.cookies.refreshToken;
+    const token = req.get("Authorization")?.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
     const user = await User.findOne({ email: decoded.email }).exec();
+    // if (!decoded) next(new AppError("Already signed out", 400));
     user.active = "offline";
     user.isActive = false;
-    if (!cookie || !decoded) next(new AppError("Already signed out", 400));
     await user.save();
     res.clearCookie("refreshToken", {
       httpOnly: true,
@@ -82,6 +83,13 @@ export const logout = fn(
     res
       .status(200)
       .json({ status: "success", message: "user signed out successfully" });
+  }
+);
+export const forgotPassword = fn(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body as Pick<IUser, "email">;
+    const user = await User.findOne({ email }).exec();
+    if (!user) return next(new AppError(`Invalid credentials ${email}`, 404));
   }
 );
 export const refresh = fn(async (req, res, next) => {});

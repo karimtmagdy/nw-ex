@@ -1,9 +1,9 @@
 import { Types, model, Schema } from "mongoose";
 import slugify from "slugify";
 import bcrypt from "bcryptjs";
-import { roles, status, UserDocument } from "../types/UserType";
+import { gender, IUser, roles, states, status } from "../types/UserType";
 
-const UserSchema = new Schema<UserDocument>(
+const UserSchema = new Schema<IUser>(
   {
     username: {
       type: String,
@@ -30,28 +30,11 @@ const UserSchema = new Schema<UserDocument>(
       firstName: { type: String, trim: true },
       lastName: { type: String, trim: true },
     },
-    gender: {
-      type: String,
-      enum: ["male", "female"],
-      sparse: true,
-      select: false,
-    },
+    gender: { type: String, enum: gender, sparse: true, select: false },
     // address: { type: String, sparse: true, select: false },
-    role: {
-      type: String,
-      enum: roles,
-      default: "user",
-    },
-    status: {
-      type: String,
-      enum: status,
-      default: "active",
-    },
-    active: {
-      type: String,
-      enum: ["online", "offline"],
-      default: "offline",
-    },
+    role: { type: String, enum: roles, default: "user" },
+    status: { type: String, enum: status, default: "active" },
+    active: { type: String, enum: states, default: "offline" },
     photo: {
       url: {
         type: String,
@@ -61,17 +44,14 @@ const UserSchema = new Schema<UserDocument>(
       publicId: { type: String, default: null },
     },
     refreshToken: String,
-    phone: { type: String, default: null, select: false, sparse: true },
+    phone: { type: String, select: false, sparse: true },
     verified: { type: Boolean, default: false },
-    rememberMe: { type: Boolean, default: false, sparse: true },
+    remember: { type: Boolean, default: false, sparse: false },
     isActive: { type: Boolean, default: false },
     activeAt: { type: Date, select: false, sparse: false },
     deletedAt: { type: Date, select: false, sparse: false },
-    cart: [{ type: Types.ObjectId, ref: "cart", sparse: true }],
-    permissions: {
-      type: [String],
-      default: undefined,
-    },
+    cart: [{ type: Types.ObjectId, ref: "Cart", select: false, sparse: true }],
+    permissions: { type: [String], select: false, sparse: true },
   },
   { timestamps: true, collection: "users" }
 );
@@ -99,4 +79,4 @@ UserSchema.set("toJSON", {
   },
 });
 UserSchema.index({ username: 1, email: 1 });
-export const User = model<UserDocument>("User", UserSchema);
+export const User = model<IUser>("User", UserSchema);

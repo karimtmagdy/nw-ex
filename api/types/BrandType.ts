@@ -1,9 +1,14 @@
-import { HydratedDocument } from "mongoose";
-export interface IBrand {
+import { Document, Types } from "mongoose";
+
+export interface IBrand extends Pick<Document, "_id"> {
   name: string;
   image: string;
+  status: "active" | "inactive";
+  slug: string;
   isActive: boolean;
-  status?: string;
-  slug?: string;
+  description: string;
 }
-export type BrandDocument = HydratedDocument<IBrand>;
+
+export interface IBrandDocument extends IBrand {
+  _id: Types.ObjectId;
+}

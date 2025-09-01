@@ -1,8 +1,8 @@
-import { BrandDocument } from "../types/BrandType";
+import { IBrand } from "../types/BrandType";
 import { model, Schema } from "mongoose";
 import slugify from "slugify";
 
-const BrandSchema = new Schema<BrandDocument>(
+const BrandSchema = new Schema<IBrand>(
   {
     name: {
       type: String,
@@ -13,6 +13,7 @@ const BrandSchema = new Schema<BrandDocument>(
       maxlength: 30,
     },
     image: { type: String },
+    description: { type: String ,minlength: 20, maxlength: 1000},
     isActive: { type: Boolean, default: true },
     status: {
       type: String,
@@ -28,4 +29,4 @@ BrandSchema.pre("save", function (next) {
   next();
 });
 
-export const Brand = model<BrandDocument>("Brand", BrandSchema);
+export const Brand = model<IBrand>("Brand", BrandSchema);

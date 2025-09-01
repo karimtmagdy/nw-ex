@@ -1,7 +1,7 @@
 import { Types, model, Schema } from "mongoose";
-import { type TransactionDocument } from "../types/TransactionType";
+import { type ITransaction } from "../types/TransactionType";
 
-const TransactionSchema = new Schema<TransactionDocument>({
+const TransactionSchema = new Schema<ITransaction>({
   orderId: { type: Types.ObjectId, ref: "Order", required: true },
   userId: { type: Types.ObjectId, ref: "User", required: true },
   method: { type: String, enum: ["paypal", "stripe", "cod"], required: true },
@@ -14,7 +14,7 @@ const TransactionSchema = new Schema<TransactionDocument>({
   date: { type: Date, default: Date.now },
 });
 
-export const Transaction = model<TransactionDocument>(
+export const Transaction = model<ITransaction>(
   "Transaction",
   TransactionSchema
 );

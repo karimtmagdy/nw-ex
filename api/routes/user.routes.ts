@@ -9,20 +9,19 @@ import {
 import { validate, validateParams } from "../middleware/validate";
 import {
   createUserSchema,
-  deleteUserSchema,
   singleUserSchema,
   updateUserSchema,
 } from "../validator/user.zod";
-// import { authorize } from "../middleware/is-verify";
+import { authorize, onlyAdmin } from "../middleware/is-verify";
 
 const router = Router();
-// router.use([authorize]);
+router.use([authorize, onlyAdmin]);
 
 router.route("/").post(validate(createUserSchema), createUser).get(getAllUser);
 router
   .route("/:id")
   .get(validateParams(singleUserSchema), singleUser)
-  .delete(validateParams(deleteUserSchema), deleteUser)
+  .delete(validateParams(singleUserSchema), deleteUser)
   .patch(validate(updateUserSchema), updateUser);
 
 export { router as userRouter };
