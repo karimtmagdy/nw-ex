@@ -22,6 +22,9 @@ export const singleCategorySchema = categorySchema.pick({}).and(
     id: ObjectIdSchema,
   })
 );
+export const updatesCategorySchema = z.object({
+  id: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ID"),
+});
 export const multipleCategoriesSchema = z.object({
   ids: z
     .array(z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ID"))

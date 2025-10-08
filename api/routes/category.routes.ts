@@ -28,5 +28,5 @@ router
   .delete(validateParams(singleCategorySchema), deleteCategory);
 router
   .route("/:bulk-delete")
-  .delete(validateParams(multipleCategoriesSchema), deleteMultipleCategory);
+  .delete(validate(multipleCategoriesSchema), deleteMultipleCategory);
 export { router as categoryRouter };
