@@ -22,3 +22,9 @@ export const singleCategorySchema = categorySchema.pick({}).and(
     id: ObjectIdSchema,
   })
 );
+export const multipleCategoriesSchema = z.object({
+  ids: z
+    .array(z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ID"))
+    .min(1, "At least one category ID is required")
+    .max(100, "Cannot delete more than 100 categories at once"),
+});

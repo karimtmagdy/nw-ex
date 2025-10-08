@@ -83,14 +83,25 @@ export const deleteCategory = fn(
       .json({ status: "success", message: "Category has been deleted" });
   }
 );
-
+// @route   DELETE api/v1/categories/:id
+// @desc    Delete a category
+// @access  Private/admin
 export const deleteMultipleCategory = fn(
   async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return next(new AppError("Please provide valid category IDs", 400));
+    }
     const categories = await Category.deleteMany({ _id: { $in: ids } });
-    if (!categories) return next(new AppError("Categories not found", 404));
-    res
-      .status(200)
-      .json({ status: "success", message: "Categories has been deleted" });
+    if (categories.deletedCount === 0) {
+      return next(new AppError("No categories found to delete", 404));
+    }
+    res.status(200).json({
+      status: "success",
+      message: `${categories.deletedCount} ${
+        categories.deletedCount === 1 ? "category" : "categories"
+      } has been deleted successfully`,
+      deletedCount: categories.deletedCount,
+    });
   }
 );
