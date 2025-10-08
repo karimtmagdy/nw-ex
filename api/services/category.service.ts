@@ -83,3 +83,14 @@ export const deleteCategory = fn(
       .json({ status: "success", message: "Category has been deleted" });
   }
 );
+
+export const deleteMultipleCategory = fn(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { ids } = req.body;
+    const categories = await Category.deleteMany({ _id: { $in: ids } });
+    if (!categories) return next(new AppError("Categories not found", 404));
+    res
+      .status(200)
+      .json({ status: "success", message: "Categories has been deleted" });
+  }
+);

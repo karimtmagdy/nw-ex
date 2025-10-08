@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createCategory,
   deleteCategory,
+  deleteMultipleCategory,
   getAllCategories,
   singleCategory,
   updateCategory,
@@ -14,23 +15,16 @@ import {
 } from "../validator/category.zod";
 import { authorize, onlyAdmin } from "../middleware/is-verify";
 const router = Router();
-
+// [authorize, onlyAdmin],
 router
   .route("/")
-  .post([authorize, onlyAdmin], validate(categorySchema), createCategory)
+  .post(validate(categorySchema), createCategory)
   .get(getAllCategories);
 router
   .route("/:id")
   .get(validateParams(singleCategorySchema), singleCategory)
-  .patch(
-    [authorize, onlyAdmin],
-    validateParams(updateCategorySchema),
-    updateCategory
-  )
-  .delete(
-    [authorize, onlyAdmin],
-    validateParams(singleCategorySchema),
-    deleteCategory
-  );
+  .patch(validateParams(updateCategorySchema), updateCategory)
+  .delete(validateParams(singleCategorySchema), deleteCategory)
+  .delete(validateParams(singleCategorySchema), deleteMultipleCategory);
 
 export { router as categoryRouter };

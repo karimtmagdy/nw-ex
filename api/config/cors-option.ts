@@ -6,6 +6,7 @@ export const corsOption = () => {
     origin: (origin, callback) => {
       const allowedOrigins = [
         "http://localhost:3000",
+        "http://localhost:5173",
         "https://bandw.vercel.app",
       ];
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
